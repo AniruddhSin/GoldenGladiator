@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour
     private float move = 0f;
     private bool isRunning = false;
     public InputSystem_Actions actions;
+    private bool inputAllowed = true;
     private Rigidbody2D rb;
     public Transform groundCheckTransform;
     public float groundCheckRadius = 0.2f;
@@ -18,10 +20,22 @@ public class Player : MonoBehaviour
 
     private Animator animator;
     private AnimatorStateInfo animState;
+
+    private Health health;
+    private SpriteRenderer spriteRenderer;
     
     void Awake()
     {
         actions = new InputSystem_Actions();
+        health = GetComponent<Health>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (health != null)
+        {
+            health.OnDie += OnDie;
+            health.OnHealed += OnHeal;
+            health.OnDamaged += OnDamage;
+        }
     }
 
     void OnEnable()
@@ -61,6 +75,11 @@ public class Player : MonoBehaviour
 
     void Movement (InputAction.CallbackContext ctx)
     {
+        if (!inputAllowed)
+        {
+            animator.SetBool("IsRunning", false);
+            return;
+        }
         if (ctx.performed)
         {
             isRunning = true;
@@ -74,6 +93,8 @@ public class Player : MonoBehaviour
     }
     void Jumping (InputAction.CallbackContext ctx)
     {
+        if (!inputAllowed)
+            return;
         if (ctx.performed)
         {
             if (isGrounded)
@@ -87,6 +108,44 @@ public class Player : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheckTransform.position, groundCheckRadius);
+    }
+
+    void OnDamage(float damage, GameObject source)
+    {
+        StartCoroutine(BlinkRed());
+        animator.SetTrigger("Hurt");
+    }
+    private IEnumerator BlinkRed()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.15f);
+        spriteRenderer.color = Color.white;
+    }
+
+    void OnHeal(float health)
+    {
+        StartCoroutine(BlinkGreen());
+    }
+    private IEnumerator BlinkGreen()
+    {
+        spriteRenderer.color = Color.green;
+        yield return new WaitForSeconds(0.15f);
+        spriteRenderer.color = Color.white;
+    }
+
+    void OnDie()
+    {
+        inputAllowed = false;
+        rb.linearVelocity = Vector2.zero;
+        animator.SetTrigger("Death");
+    }
+    void respawn()
+    {
+        animator.Play("Idle");
+        health.ResetHealth();
+        transform.position = Vector3.zero;
+        move = 0f;
+        inputAllowed = true;
     }
 
     // animations

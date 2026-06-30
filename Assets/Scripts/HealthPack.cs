@@ -1,0 +1,14 @@
+using UnityEngine;
+
+public class HealthPack : MonoBehaviour
+{
+    public float healValue = 2f;
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            Health h = collision.gameObject.GetComponent<Health>();
+            h.Heal(healValue);
+        }
+    }
+}

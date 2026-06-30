@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 5457907219522783163}
   - component: {fileID: 8795594694466773163}
   - component: {fileID: 83952587311546917}
+  - component: {fileID: 4827796195533532063}
+  - component: {fileID: 1094398876496261841}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -218,6 +220,36 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &4827796195533532063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361850648000395456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc2b7e64fdf447158457fe6b1ee612c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 10
+  currentHealth: 0
+--- !u!114 &1094398876496261841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361850648000395456}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e3fab4f60695b14c9a85e1b2c51ecaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColorSwap_HeroKnight
+  m_sourceColors:
+  - {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_newColors:
+  - {r: 0.5450981, g: 0, b: 0.5450981, a: 1}
 --- !u!1 &8172637105813408773
 GameObject:
   m_ObjectHideFlags: 0
