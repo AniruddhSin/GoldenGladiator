@@ -8,7 +8,10 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private BoxCollider2D attackCollider;
     // keep track of already hit objects per swing so they dont take damage multiple times
     private HashSet<GameObject> hitObjects = new HashSet<GameObject>(); 
-    [SerializeField] private float attackDamage = 3f;
+    private float attackDamage;
+    [SerializeField] private float defaultAttackDamage = 3f;
+    [SerializeField] private float heavyAttackDamage = 5f;
+
     [SerializeField] private float defaultAttackCooldown = 0.25f;
     private float attackCooldown;
     [SerializeField] private float comboCooldown = 1f;
@@ -31,6 +34,7 @@ public class PlayerAttack : MonoBehaviour
     {
         attackCollider.enabled = false;
         attackCooldown = defaultAttackCooldown;
+        attackDamage = defaultAttackDamage;
     }
     void OnAttack()
     {
@@ -45,14 +49,16 @@ public class PlayerAttack : MonoBehaviour
             else
             {
                 attackNumber = 1;
+                attackDamage = defaultAttackDamage;
             }
             lastAttackTime = Time.time;
             triggerString = "Attack" + attackNumber;
-            animator.SetTrigger(triggerString);
             if (attackNumber == maxChain)
             {
                 attackCooldown = chainCooldown;
+                attackDamage = heavyAttackDamage;
             }
+            animator.SetTrigger(triggerString);
         }
     }
     public void OnTriggerEnter2D(Collider2D collision)
