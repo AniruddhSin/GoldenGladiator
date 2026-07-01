@@ -9,8 +9,14 @@ public class PlayerAttack : MonoBehaviour
     // keep track of already hit objects per swing so they dont take damage multiple times
     private HashSet<GameObject> hitObjects = new HashSet<GameObject>(); 
     [SerializeField] private float attackDamage = 3f;
-    private float attackCooldown = 0.55f;
+    [SerializeField] private float defaultAttackCooldown = 0.25f;
+    private float attackCooldown;
+    [SerializeField] private float comboCooldown = 1f;
+    [SerializeField] private float chainCooldown = 1.2f;
     private float lastAttackTime = 0f;
+    private int attackNumber = 1;
+    private int maxChain = 3;
+    private string triggerString;
     void Awake()
     {
         InputHandler = GetComponent<PlayerInputHandler>();
@@ -24,13 +30,29 @@ public class PlayerAttack : MonoBehaviour
     void Start()
     {
         attackCollider.enabled = false;
+        attackCooldown = defaultAttackCooldown;
     }
     void OnAttack()
     {
+        //Debug.Log(Time.time - lastAttackTime);
         if (Time.time - lastAttackTime > attackCooldown)
         {
+            attackCooldown = defaultAttackCooldown;
+            if (Time.time - lastAttackTime < comboCooldown)
+            {
+                attackNumber += 1;
+            }
+            else
+            {
+                attackNumber = 1;
+            }
             lastAttackTime = Time.time;
-            animator.SetTrigger("Attack1");
+            triggerString = "Attack" + attackNumber;
+            animator.SetTrigger(triggerString);
+            if (attackNumber == maxChain)
+            {
+                attackCooldown = chainCooldown;
+            }
         }
     }
     public void OnTriggerEnter2D(Collider2D collision)
@@ -40,7 +62,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void EnableHitbox()
     {
-        Debug.Log("hitbox enabled");
+        //Debug.Log("hitbox enabled");
         hitObjects.Clear();
         attackCollider.enabled = true;
 
@@ -57,7 +79,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void DisableHitbox()
     {
-        Debug.Log("hitbox disabled");
+        //Debug.Log("hitbox disabled");
         attackCollider.enabled = false;
     }
 

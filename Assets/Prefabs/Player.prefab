@@ -309,6 +309,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   attackCollider: {fileID: 6203769426050003149}
   attackDamage: 3
+  defaultAttackCooldown: 0.25
+  comboCooldown: 0.6
+  chainCooldown: 0.9
 --- !u!1 &4413688077309609659
 GameObject:
   m_ObjectHideFlags: 0
