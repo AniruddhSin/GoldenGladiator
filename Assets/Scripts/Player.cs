@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
     public Transform groundCheckTransform;
     public float groundCheckRadius = 0.2f;
+    public Vector2 boxParam = new Vector2(0.8f, 0.05f);
     public LayerMask groundLayer;
     private bool isGrounded;
 
@@ -46,7 +47,8 @@ public class Player : MonoBehaviour
     void Update()
     {
         //ground check
-        isGrounded = Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
+        //isGrounded = Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
+        isGrounded = Physics2D.OverlapBox(groundCheckTransform.position, boxParam, 0f, groundLayer);
         animator.SetBool("Grounded", isGrounded);
         //jump check
         if (isGrounded && InputHandler.jumped)
@@ -72,7 +74,8 @@ public class Player : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(groundCheckTransform.position, groundCheckRadius);
+        //Gizmos.DrawWireSphere(groundCheckTransform.position, groundCheckRadius);
+        Gizmos.DrawWireCube(groundCheckTransform.position, new Vector3(0.7f, 0.05f, 0f));
     }
 
     void OnDamage(float damage, GameObject source)
@@ -112,39 +115,4 @@ public class Player : MonoBehaviour
         InputHandler.inputAllowed = true;
     }
 
-    // animations
-    /*
-    private void SetAnimation(float moveValue)
-    {
-        animState = animator.GetCurrentAnimatorStateInfo(0);
-        Debug.Log("1 "+animState.IsName("Run"));
-        Debug.Log("2 "+animState.IsName("Idle"));
-        if (isGrounded)
-        {
-            if(moveValue == 0)
-            {
-                animator.Play("Idle");
-            }
-            else
-            {
-                if (!animState.IsName("Run"))
-                {
-                    //Debug.Log("true");
-                    animator.Play("Run");
-                }
-            }
-        }
-        else
-        {
-            if (rb.linearVelocityY > 0)
-            {
-                animator.Play("Jump");
-            }
-            else
-            {
-                animator.Play("Fall");   
-            }
-        }
-    }
-    */
 }

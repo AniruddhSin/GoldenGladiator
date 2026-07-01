@@ -200,8 +200,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.026887685, y: 0.6565511}
-  m_Size: {x: 0.850624, y: 1.238347}
+  m_Offset: {x: -0.03, y: 0.6585681}
+  m_Size: {x: 0.850624, y: 1.2343131}
   m_Direction: 0
 --- !u!114 &1469770240152560419
 MonoBehaviour:
@@ -216,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
   inputAllowed: 1
+  pauseMenu: {fileID: 0}
 --- !u!114 &83952587311546917
 MonoBehaviour:
   m_ObjectHideFlags: 0
