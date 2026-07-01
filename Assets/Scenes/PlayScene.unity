@@ -1202,6 +1202,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5116290724699683449, guid: 9f46d0b023a804f1d84ed8fca2db6ba3, type: 3}
   m_PrefabInstance: {fileID: 6259942599916887617}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &791583730 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1469770240152560419, guid: 9f46d0b023a804f1d84ed8fca2db6ba3, type: 3}
+  m_PrefabInstance: {fileID: 6259942599916887617}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de2219e916d34c089a0dac245ea83c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
 --- !u!1 &798926533
 GameObject:
   m_ObjectHideFlags: 0
@@ -3090,6 +3101,18 @@ MonoBehaviour:
       - m_Target: {fileID: 647018948}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: TogglePause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 791583730}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: enableInput
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

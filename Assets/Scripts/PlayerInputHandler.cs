@@ -79,5 +79,9 @@ public class PlayerInputHandler : MonoBehaviour
             pauseMenu.TogglePause();
         }
     }
+    public void enableInput()
+    {
+        inputAllowed = true;
+    }
 
 }
