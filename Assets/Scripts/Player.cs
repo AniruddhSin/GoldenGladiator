@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    // REFACTOR TO STATE MACHINE LATER WHEN ADDING ATTACKS
     public float moveSpeed = 3f;
     public float jumpForce = 1f;
     private PlayerInputHandler InputHandler;
@@ -17,17 +16,21 @@ public class Player : MonoBehaviour
     private bool isGrounded;
 
     private Animator animator;
-    private AnimatorStateInfo animState;
 
     private Health health;
     public Image healthImage;
     private SpriteRenderer spriteRenderer;
+    private Transform attackRange;
+    private Vector3 posAttackRange = new Vector3(0.92f, 0.82f, 0f);
+    private Vector3 negAttackRange = new Vector3(-0.92f, 0.82f, 0f);
     
     void Awake()
     {
         InputHandler = GetComponent<PlayerInputHandler>();
         health = GetComponent<Health>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         if (health != null)
         {
@@ -39,8 +42,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        attackRange = transform.Find("AttackRange");
     }
 
     // Update is called once per frame
@@ -61,9 +63,11 @@ public class Player : MonoBehaviour
         if (InputHandler.moveX < 0)
         {
             spriteRenderer.flipX = true;
+            attackRange.localPosition = negAttackRange;
         }else if (InputHandler.moveX > 0)
         {
             spriteRenderer.flipX = false;
+            attackRange.localPosition = posAttackRange;
         }
         rb.linearVelocityX = InputHandler.moveX * moveSpeed;
         animator.SetBool("IsRunning", InputHandler.isSprinting);

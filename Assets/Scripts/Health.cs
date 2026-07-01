@@ -3,7 +3,9 @@ using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
+    [field: SerializeField]
     public float maxHealth {get; private set;} = 10f;
+    [field: SerializeField]
     public float currentHealth {get; private set;}
 
     public UnityAction<float, GameObject> OnDamaged;

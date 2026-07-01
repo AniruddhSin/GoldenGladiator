@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool jumped {get; private set;} = false;
     public float moveX {get; private set;} = 0f;
     [SerializeField] private PauseMenu pauseMenu;
+    public UnityAction OnAttack;
     void Awake()
     {
         actions = new InputSystem_Actions();
@@ -16,24 +18,30 @@ public class PlayerInputHandler : MonoBehaviour
     void OnEnable()
     {
         actions.Player.Enable();
+
         actions.Player.Move.performed += Move;
         actions.Player.Jump.performed += Jump;
         actions.Player.Pause.performed += Pause;
+        actions.Player.Attack.performed += Attack;
 
         actions.Player.Move.canceled += Move;
         actions.Player.Jump.canceled += Jump;
         actions.Player.Pause.canceled += Pause;
+        actions.Player.Attack.canceled += Attack;
     }
     void OnDisable()
     {
         actions.Player.Disable();
+
         actions.Player.Move.performed -= Move;
         actions.Player.Jump.performed -= Jump;
         actions.Player.Pause.performed -= Pause;
+        actions.Player.Attack.canceled -= Attack;
 
         actions.Player.Move.canceled -= Move;
         actions.Player.Jump.canceled -= Jump;
         actions.Player.Pause.canceled -= Pause;
+        actions.Player.Attack.canceled -= Attack;
     }
 
 
@@ -68,6 +76,18 @@ public class PlayerInputHandler : MonoBehaviour
         }else if (ctx.canceled)
         {
             jumped = false;
+        }
+    }
+
+    void Attack(InputAction.CallbackContext ctx)
+    {
+        if (!inputAllowed)
+        {
+            return;
+        }
+        if (ctx.performed)
+        {
+            OnAttack?.Invoke();
         }
     }
 
