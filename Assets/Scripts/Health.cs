@@ -3,8 +3,8 @@ using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
-    public float maxHealth = 10f;
-    public float currentHealth;
+    public float maxHealth {get; private set;} = 10f;
+    public float currentHealth {get; private set;}
 
     public UnityAction<float, GameObject> OnDamaged;
     public UnityAction<float> OnHealed;

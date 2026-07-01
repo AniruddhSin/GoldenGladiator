@@ -1,17 +1,14 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     // REFACTOR TO STATE MACHINE LATER WHEN ADDING ATTACKS
     public float moveSpeed = 3f;
     public float jumpForce = 1f;
-    private float move = 0f;
-    private bool isRunning = false;
-    public InputSystem_Actions actions;
-    private bool inputAllowed = true;
+    private PlayerInputHandler InputHandler;
     private Rigidbody2D rb;
     public Transform groundCheckTransform;
     public float groundCheckRadius = 0.2f;
@@ -22,11 +19,12 @@ public class Player : MonoBehaviour
     private AnimatorStateInfo animState;
 
     private Health health;
+    public Image healthImage;
     private SpriteRenderer spriteRenderer;
     
     void Awake()
     {
-        actions = new InputSystem_Actions();
+        InputHandler = GetComponent<PlayerInputHandler>();
         health = GetComponent<Health>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -38,24 +36,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnEnable()
-    {
-        actions.Player.Enable();
-        actions.Player.Move.performed += Movement;
-        actions.Player.Jump.performed += Jumping;
-
-        actions.Player.Move.canceled += Movement;
-        actions.Player.Jump.canceled += Jumping;
-    }
-    void OnDisable()
-    {
-        actions.Player.Disable();
-        actions.Player.Move.performed -= Movement;
-        actions.Player.Jump.performed -= Jumping;
-
-        actions.Player.Move.canceled -= Movement;
-        actions.Player.Jump.canceled -= Jumping;
-    }
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -65,44 +45,29 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //ground check
         isGrounded = Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
         animator.SetBool("Grounded", isGrounded);
+        //jump check
+        if (isGrounded && InputHandler.jumped)
+        {
+            rb.linearVelocityY = jumpForce;
+            animator.SetTrigger("Jump");
+        }
         animator.SetFloat("AirSpeedY", rb.linearVelocityY);
-        rb.linearVelocityX = move * moveSpeed;
+        //move check
+        if (InputHandler.moveX < 0)
+        {
+            spriteRenderer.flipX = true;
+        }else if (InputHandler.moveX > 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+        rb.linearVelocityX = InputHandler.moveX * moveSpeed;
+        animator.SetBool("IsRunning", InputHandler.isSprinting);
         //Debug.Log("0: "+move);
         //SetAnimation(move);
-    }
-
-    void Movement (InputAction.CallbackContext ctx)
-    {
-        if (!inputAllowed)
-        {
-            animator.SetBool("IsRunning", false);
-            return;
-        }
-        if (ctx.performed)
-        {
-            isRunning = true;
-        }else if (ctx.canceled)
-        {
-            isRunning = false;
-        }
-        animator.SetBool("IsRunning", isRunning);
-        move = ctx.ReadValue<Vector2>().x;
-        //Debug.Log($"{ctx.phase}  {ctx.ReadValue<Vector2>()}");
-    }
-    void Jumping (InputAction.CallbackContext ctx)
-    {
-        if (!inputAllowed)
-            return;
-        if (ctx.performed)
-        {
-            if (isGrounded)
-            {
-                rb.linearVelocityY = jumpForce;
-                animator.SetTrigger("Jump");
-            }
-        }
+        healthImage.fillAmount = health.currentHealth / health.maxHealth;
     }
     void OnDrawGizmosSelected()
     {
@@ -135,7 +100,7 @@ public class Player : MonoBehaviour
 
     void OnDie()
     {
-        inputAllowed = false;
+        InputHandler.inputAllowed = false;
         rb.linearVelocity = Vector2.zero;
         animator.SetTrigger("Death");
     }
@@ -144,8 +109,7 @@ public class Player : MonoBehaviour
         animator.Play("Idle");
         health.ResetHealth();
         transform.position = Vector3.zero;
-        move = 0f;
-        inputAllowed = true;
+        InputHandler.inputAllowed = true;
     }
 
     // animations
