@@ -11,8 +11,8 @@ public class Player : MonoBehaviour
     private PlayerInputHandler InputHandler;
     private Rigidbody2D rb;
     public Transform groundCheckTransform;
-    public float groundCheckRadius = 0.2f;
-    public Vector2 boxParam = new Vector2(0.8f, 0.05f);
+    //public float groundCheckRadius = 0.2f;
+    public Vector2 boxParam = new Vector2(0.7f, 0.05f);
     public LayerMask groundLayer;
     private bool isGrounded;
 
