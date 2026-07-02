@@ -8,7 +8,8 @@ public class Enemy : MonoBehaviour
     private enum State
     {
         Patrol,
-        Chase
+        Chase,
+        Idle
     }
     private State currentState;
     [SerializeField] private float patrolSpeed = 1f;
@@ -60,7 +61,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        currentState = State.Patrol;
+        currentState = State.Idle;
         attackCollider.enabled = false;
     }
 
@@ -79,6 +80,10 @@ public class Enemy : MonoBehaviour
                 Chase();
                 break;
         }
+    }
+    public void setPatrol()
+    {
+        currentState = State.Patrol;
     }
 
     void Patrol()
