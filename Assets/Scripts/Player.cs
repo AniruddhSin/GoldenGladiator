@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public float moveSpeed = 5f;
     public float wallSlideSpeed = 2f;
     public float jumpForce = 15f;
+    private float jumpCheckCooldown = 0.5f;
+    private float timeLastJumped;
     private PlayerInputHandler InputHandler;
     private Rigidbody2D rb;
     public Transform groundCheckTransform;
@@ -51,6 +53,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         attackRange = transform.Find("AttackRange");
+        timeLastJumped = Time.time - 1f;
+
     }
 
     // Update is called once per frame
@@ -63,9 +67,12 @@ public class Player : MonoBehaviour
         //jump check
         if (isGrounded && InputHandler.jumped)
         {
-            Debug.Log("jump");
-            rb.linearVelocityY = jumpForce;
-            animator.SetTrigger("Jump");
+            if (Time.time - timeLastJumped > jumpCheckCooldown)
+            {
+                timeLastJumped = Time.time;
+                rb.linearVelocityY = jumpForce;
+                animator.SetTrigger("Jump");
+            }
         }
         /*if (isWallSliding && InputHandler.jumped && InputHandler.inputAllowed)
         {
@@ -168,6 +175,17 @@ public class Player : MonoBehaviour
         transform.position = Vector3.zero;
         d.isInvincible = false;
         InputHandler.inputAllowed = true;
+    }
+
+    public void TeleportPlayer(Vector2 destination)
+    {
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.position = destination;
+
+        spriteRenderer.flipX = false;
+        isGrounded = false;
+        isWallSliding = false;
     }
 
 }

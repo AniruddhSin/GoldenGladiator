@@ -9,7 +9,6 @@ public class PlayerInputHandler : MonoBehaviour
     public bool isSprinting {get; private set;} = false;
     public bool jumped {get; private set;} = false;
     public float moveX {get; private set;} = 0f;
-    [SerializeField] private PauseMenu pauseMenu;
     public UnityAction OnAttack;
     void Awake()
     {
@@ -97,9 +96,12 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (ctx.performed)
         {
-            inputAllowed = !inputAllowed;
-            pauseMenu.TogglePause();
+            GameManager.Instance.TogglePause();
         }
+    }
+    public void disableInput()
+    {
+        inputAllowed = false;
     }
     public void enableInput()
     {
