@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     private Transform attackRange;
     private Vector3 posAttackRange = new Vector3(0.92f, 0.82f, 0f);
     private Vector3 negAttackRange = new Vector3(-0.92f, 0.82f, 0f);
+    private Damageable d;
     
     void Awake()
     {
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        d = GetComponent<Damageable>();
 
         if (health != null)
         {
@@ -109,6 +111,7 @@ public class Player : MonoBehaviour
     {
         InputHandler.inputAllowed = false;
         rb.linearVelocity = Vector2.zero;
+        d.isInvincible = true;
         animator.SetTrigger("Death");
     }
     void respawn()
@@ -116,6 +119,7 @@ public class Player : MonoBehaviour
         animator.Play("Idle");
         health.ResetHealth();
         transform.position = Vector3.zero;
+        d.isInvincible = false;
         InputHandler.inputAllowed = true;
     }
 

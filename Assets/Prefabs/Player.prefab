@@ -14,13 +14,13 @@ GameObject:
   - component: {fileID: 3216474719115159361}
   - component: {fileID: 5684441059825033739}
   - component: {fileID: 620286156781089213}
-  - component: {fileID: 1469770240152560419}
   - component: {fileID: 83952587311546917}
+  - component: {fileID: 1469770240152560419}
   - component: {fileID: 8795594694466773163}
+  - component: {fileID: 5784526960975111889}
   - component: {fileID: 4827796195533532063}
   - component: {fileID: 6129728721988650395}
-  - component: {fileID: 5784526960975111889}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -205,20 +205,6 @@ CapsuleCollider2D:
   m_Offset: {x: -0.03, y: 0.6585681}
   m_Size: {x: 0.850624, y: 1.2343131}
   m_Direction: 0
---- !u!114 &1469770240152560419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1361850648000395456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8de2219e916d34c089a0dac245ea83c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
-  inputAllowed: 1
-  pauseMenu: {fileID: 0}
 --- !u!114 &83952587311546917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,6 +235,20 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1469770240152560419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361850648000395456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de2219e916d34c089a0dac245ea83c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
+  inputAllowed: 1
+  pauseMenu: {fileID: 0}
 --- !u!114 &8795594694466773163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,6 +269,24 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   healthImage: {fileID: 0}
+--- !u!114 &5784526960975111889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361850648000395456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f02253d6a0904eefa7c8f0939844ab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  attackCollider: {fileID: 6203769426050003149}
+  defaultAttackDamage: 3
+  heavyAttackDamage: 5
+  defaultAttackCooldown: 0.25
+  comboCooldown: 0.6
+  chainCooldown: 0.9
 --- !u!114 &4827796195533532063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,23 +313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 587d396f9f4944cd7acff43555b19e46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Damageable
---- !u!114 &5784526960975111889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1361850648000395456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f02253d6a0904eefa7c8f0939844ab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  attackCollider: {fileID: 6203769426050003149}
-  attackDamage: 3
-  defaultAttackCooldown: 0.25
-  comboCooldown: 0.6
-  chainCooldown: 0.9
 --- !u!1 &4413688077309609659
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +323,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8689752185577390858}
   - component: {fileID: 6203769426050003149}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: AttackRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,7 +400,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2473027645106494894}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
