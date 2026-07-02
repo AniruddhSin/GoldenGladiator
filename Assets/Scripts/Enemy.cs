@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ public class Enemy : MonoBehaviour
     private float attackDistance = 0.8f;
     private HashSet<GameObject> hitObjects = new HashSet<GameObject>(); 
     [SerializeField] private float attackDamage = 2f;
+    private Health health;
 
     void Awake()
     {
@@ -42,6 +44,7 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        health = GetComponent<Health>();
         if (attackRange == null)
         {
             attackRange = transform.Find("AttackRange");
@@ -50,6 +53,9 @@ public class Enemy : MonoBehaviour
         {
             attackCollider = attackRange.GetComponent<BoxCollider2D>();
         }
+
+        health.OnDamaged += OnDamage;
+        health.OnDie += OnDie;
     }
 
     void Start()
@@ -220,6 +226,29 @@ public class Enemy : MonoBehaviour
             hitObjects.Add(other.gameObject);
             damageable.InflictDamage(attackDamage, this.gameObject);
         }
+    }
+
+    void OnDamage(float damage, GameObject source)
+    {
+        StartCoroutine(BlinkRed());
+        animator.SetTrigger("Hurt");
+    }
+    private IEnumerator BlinkRed()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.15f);
+        spriteRenderer.color = Color.white;
+    }
+
+    void OnDie()
+    {
+        animator.SetTrigger("Death");
+    }
+    void respawn()
+    {
+        transform.localPosition = Vector3.zero;
+        currentState = State.Patrol;
+        health.ResetHealth();
     }
 
     void OnDrawGizmos()
