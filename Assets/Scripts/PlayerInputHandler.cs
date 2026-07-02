@@ -21,6 +21,7 @@ public class PlayerInputHandler : MonoBehaviour
 
         actions.Player.Move.performed += Move;
         actions.Player.Jump.performed += Jump;
+        actions.Player.Jump.started += Jump;
         actions.Player.Pause.performed += Pause;
         actions.Player.Attack.performed += Attack;
 
@@ -35,6 +36,7 @@ public class PlayerInputHandler : MonoBehaviour
 
         actions.Player.Move.performed -= Move;
         actions.Player.Jump.performed -= Jump;
+        actions.Player.Jump.started -= Jump;
         actions.Player.Pause.performed -= Pause;
         actions.Player.Attack.canceled -= Attack;
 
@@ -70,7 +72,7 @@ public class PlayerInputHandler : MonoBehaviour
             jumped = false;
             return;
         }
-        if (ctx.performed)
+        if (ctx.started)
         {
             jumped = true;
         }else if (ctx.canceled)

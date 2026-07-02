@@ -5,15 +5,19 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public float moveSpeed = 3f;
-    public float jumpForce = 1f;
+    public float moveSpeed = 5f;
+    public float wallSlideSpeed = 2f;
+    public float jumpForce = 15f;
     private PlayerInputHandler InputHandler;
     private Rigidbody2D rb;
     public Transform groundCheckTransform;
     //public float groundCheckRadius = 0.2f;
-    public Vector2 boxParam = new Vector2(0.7f, 0.05f);
+    public Vector2 groundBoxParam = new Vector2(0.45f, 0.05f);
+    public Vector2 wallBoxParam = new Vector2(0.05f, 1f);
     public LayerMask groundLayer;
-    private bool isGrounded;
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private bool isWallSliding;
+    public Transform wallCheckTransform;
 
     private Animator animator;
 
@@ -23,6 +27,8 @@ public class Player : MonoBehaviour
     private Transform attackRange;
     private Vector3 posAttackRange = new Vector3(0.92f, 0.82f, 0f);
     private Vector3 negAttackRange = new Vector3(-0.92f, 0.82f, 0f);
+    private Vector3 posWallCheck = new Vector3(0.4f, 0.65f, 0f);
+    private Vector3 negWallCheck = new Vector3(-0.42f, 0.65f, 0f);
     private Damageable d;
     
     void Awake()
@@ -52,26 +58,60 @@ public class Player : MonoBehaviour
     {
         //ground check
         //isGrounded = Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
-        isGrounded = Physics2D.OverlapBox(groundCheckTransform.position, boxParam, 0f, groundLayer);
+        isGrounded = Physics2D.OverlapBox(groundCheckTransform.position, groundBoxParam, 0f, groundLayer);
         animator.SetBool("Grounded", isGrounded);
         //jump check
         if (isGrounded && InputHandler.jumped)
         {
+            Debug.Log("jump");
             rb.linearVelocityY = jumpForce;
             animator.SetTrigger("Jump");
         }
+        /*if (isWallSliding && InputHandler.jumped && InputHandler.inputAllowed)
+        {
+            Debug.Log("walljump");
+            InputHandler.inputAllowed = false;
+            StartCoroutine(ResumeInput());
+            spriteRenderer.flipX = !spriteRenderer.flipX;
+            rb.linearVelocityX = 1.5f*(spriteRenderer.flipX ? -moveSpeed : moveSpeed);
+            rb.linearVelocityY = jumpForce*0.7f;
+            animator.SetTrigger("Jump");
+        }*/
+        //wall check
+        if (!isGrounded)
+        {
+            if (Physics2D.OverlapBox(wallCheckTransform.position, wallBoxParam, 0f, groundLayer) && InputHandler.moveX != 0f)
+            {
+                isWallSliding = true;
+                rb.linearVelocityY = Mathf.Clamp(rb.linearVelocityY, -wallSlideSpeed, wallSlideSpeed);
+            }
+            else
+            {
+                isWallSliding = false;
+            }
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+        animator.SetBool("WallSlide", isWallSliding);
         animator.SetFloat("AirSpeedY", rb.linearVelocityY);
         //move check
         if (InputHandler.moveX < 0)
         {
             spriteRenderer.flipX = true;
             attackRange.localPosition = negAttackRange;
+            wallCheckTransform.localPosition = negWallCheck;
         }else if (InputHandler.moveX > 0)
         {
             spriteRenderer.flipX = false;
             attackRange.localPosition = posAttackRange;
+            wallCheckTransform.localPosition = posWallCheck;
         }
-        rb.linearVelocityX = InputHandler.moveX * moveSpeed;
+        if (!isWallSliding && InputHandler.inputAllowed)
+        {
+            rb.linearVelocityX = InputHandler.moveX * moveSpeed;
+        }
         animator.SetBool("IsRunning", InputHandler.isSprinting);
         //Debug.Log("0: "+move);
         //SetAnimation(move);
@@ -81,7 +121,14 @@ public class Player : MonoBehaviour
     {
         Gizmos.color = Color.red;
         //Gizmos.DrawWireSphere(groundCheckTransform.position, groundCheckRadius);
-        Gizmos.DrawWireCube(groundCheckTransform.position, new Vector3(0.7f, 0.05f, 0f));
+        Gizmos.DrawWireCube(groundCheckTransform.position, new Vector3(groundBoxParam.x, groundBoxParam.y, 0f));
+        Gizmos.DrawWireCube(wallCheckTransform.position, new Vector3(wallBoxParam.x, wallBoxParam.y, 0f));
+    }
+
+    private IEnumerator ResumeInput()
+    {
+        yield return new WaitForSeconds(0.1f);
+        InputHandler.inputAllowed = true;
     }
 
     void OnDamage(float damage, GameObject source)
