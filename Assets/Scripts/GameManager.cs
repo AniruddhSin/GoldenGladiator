@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Boss boss;
     private float bossRevealTime = 5f;
+
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private GameObject losePanel;
+    public bool GameOver = false;
+
     void Awake()
     {
         // Singleton
@@ -125,5 +131,24 @@ public class GameManager : MonoBehaviour
         {
             s.isFiring = false;
         }
+    }
+
+    public void EndGame(bool wonGame)
+    {
+        playerInputHandler.inputAllowed = false;
+        GameOver = true;
+        if (wonGame)
+        {
+            winPanel.SetActive(true);
+        }
+        else
+        {
+            losePanel.SetActive(true);
+        }
+    }
+
+    public void EnterMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

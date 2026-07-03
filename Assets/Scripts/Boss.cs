@@ -76,6 +76,8 @@ public class Boss : MonoBehaviour
     void OnDie()
     {
         Debug.Log("Boss Died");
-        health.ResetHealth();
+        fadeDuration = 0.2f;
+        FadeBoss(true);
+        GameManager.Instance.EndGame(true);
     }
 }

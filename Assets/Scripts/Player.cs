@@ -168,9 +168,14 @@ public class Player : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         d.isInvincible = true;
         animator.SetTrigger("Death");
+        GameManager.Instance.EndGame(false);
     }
     void respawn()
     {
+        if (GameManager.Instance.GameOver)
+        {
+            return;
+        }
         animator.Play("Idle");
         health.ResetHealth();
         transform.position = respawnLocation.position;
