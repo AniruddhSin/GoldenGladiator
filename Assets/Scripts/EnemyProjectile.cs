@@ -6,6 +6,8 @@ public class EnemyProjectile : MonoBehaviour
     [SerializeField] private float moveSpeed = 1f;
     private bool launched = false;
     [SerializeField] private float yResetLevel;
+    private float lifetime = 20f;
+    private float lifestart = 0f;
 
 
     void OnEnable()
@@ -18,7 +20,7 @@ public class EnemyProjectile : MonoBehaviour
         if (launched)
         {
             transform.position += transform.right * moveSpeed * Time.deltaTime;
-            if (transform.position.y < yResetLevel)
+            if (transform.position.y < yResetLevel || Time.time - lifestart > lifetime)
             {
                 launched = false;
                 GameManager.Instance.MeteorPool.ReturnObject(this.gameObject);
@@ -38,5 +40,6 @@ public class EnemyProjectile : MonoBehaviour
     public void Launch()
     {
         launched = true;
+        lifestart = Time.time;
     }
 }

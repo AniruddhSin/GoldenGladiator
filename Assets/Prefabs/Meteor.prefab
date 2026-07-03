@@ -197,5 +197,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectile
   damage: 1
-  moveSpeed: 2
+  moveSpeed: 5
   yResetLevel: -5

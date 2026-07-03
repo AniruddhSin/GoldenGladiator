@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
         Chase,
         Idle
     }
-    private State currentState;
+    [SerializeField] private State currentState;
     [SerializeField] private float patrolSpeed = 1f;
     [SerializeField] private Transform[] points;
     private float waypointThreshold = 0.1f;
@@ -152,7 +152,6 @@ public class Enemy : MonoBehaviour
 
         if (hit.collider != null)
         {
-            //Debug.Log("see player");
             player = hit.transform;
 
             if (currentState == State.Patrol)
@@ -249,7 +248,7 @@ public class Enemy : MonoBehaviour
     {
         animator.SetTrigger("Death");
     }
-    void respawn()
+    public void respawn()
     {
         transform.localPosition = Vector3.zero;
         currentState = State.Patrol;

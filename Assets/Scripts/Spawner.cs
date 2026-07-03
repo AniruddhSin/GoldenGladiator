@@ -16,6 +16,7 @@ public class Spawner : MonoBehaviour
         isFiring = false;
         nextFireTime = 0f;
         targetAngle = angleLeft;
+        isRotating = true;
     }
 
     void Update()
