@@ -9,6 +9,7 @@ public class Boss : MonoBehaviour
     private Damageable damageable;
     private BoxCollider2D collide;
     private Rigidbody2D rb;
+    private bool phase2Flag = false;
 
     void Awake()
     {
@@ -59,9 +60,10 @@ public class Boss : MonoBehaviour
         if (health.currentHealth <= health.maxHealth * 0.35)
         {
             GameManager.Instance.NextPhase();
-        }else if (health.currentHealth <= health.maxHealth * 0.65)
+        }else if (!phase2Flag && health.currentHealth <= health.maxHealth * 0.65)
         {
             GameManager.Instance.NextPhase();
+            phase2Flag = true;
         }
     }
     private IEnumerator BlinkRed()

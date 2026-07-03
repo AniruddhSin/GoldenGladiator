@@ -48,28 +48,30 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator BossLoop()
     {
-        while (currentPhase < 3)
+        while (currentPhase <= 3)
         {
-            yield return StartCoroutine(RunPhase(currentPhase));
+            yield return StartCoroutine(RunPhase());
         }
     }
 
-    private IEnumerator RunPhase(int phase)
+    private IEnumerator RunPhase()
     {
         yield return new WaitForSeconds(bossRevealTime);
         boss.FadeBoss(true);
         yield return new WaitForSeconds(1f);
         ActivateEnemies();
-        ActivateRandomSpawner(phase);
+        ActivateRandomSpawner(currentPhase);
         yield return new WaitUntil(() => numActiveEnemies == 0);
         boss.FadeBoss(false);
+        DeactivateSpawners();
     }
 
     public void NextPhase()
     {
         if (currentPhase < 3)
         {
-            currentPhase += 1;        
+            currentPhase += 1;
+            Debug.Log("Next Phase: " + currentPhase);        
         }
     }
     public void TogglePause()
@@ -98,6 +100,7 @@ public class GameManager : MonoBehaviour
         {
             e.gameObject.SetActive(true);
             e.respawn();
+            //Debug.Log("1");
         }
         numActiveEnemies = enemies.Length;
     }

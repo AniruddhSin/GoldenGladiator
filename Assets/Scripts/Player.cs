@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     private Vector3 posWallCheck = new Vector3(0.4f, 0.65f, 0f);
     private Vector3 negWallCheck = new Vector3(-0.42f, 0.65f, 0f);
     private Damageable d;
+    [SerializeField] private Transform respawnLocation;
     
     void Awake()
     {
@@ -172,7 +173,7 @@ public class Player : MonoBehaviour
     {
         animator.Play("Idle");
         health.ResetHealth();
-        transform.position = Vector3.zero;
+        transform.position = respawnLocation.position;
         d.isInvincible = false;
         InputHandler.inputAllowed = true;
     }

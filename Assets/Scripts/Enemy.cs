@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        currentState = State.Idle;
+        currentState = State.Patrol;
         attackCollider.enabled = false;
     }
 
@@ -247,11 +247,19 @@ public class Enemy : MonoBehaviour
     void OnDie()
     {
         animator.SetTrigger("Death");
+        patrolSpeed = 0f;
+        currentState = State.Idle;
+    }
+    public void DieFinished()
+    {
+        GameManager.Instance.EnemyDied(this);
     }
     public void respawn()
     {
+        patrolSpeed = 1f;
         transform.localPosition = Vector3.zero;
         currentState = State.Patrol;
+        //Debug.Log(currentState);
         health.ResetHealth();
     }
 
